@@ -62,6 +62,13 @@ static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 	}
 	final = finalize_and_join_tokens(expanded);
 	free_tokens(expanded);
+	if (final && (check_initial_token(final) || check_all_pipe(final)))
+	{
+		shell->last_status = INVALID;
+		write (1, "\n", 1);
+		free_everything(line, final, NULL);
+		return ;
+	}
 	if (has_pipes(final))
 	{
 		pipeline_cmds = parse_pipeline(final, shell);
