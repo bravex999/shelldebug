@@ -8,23 +8,22 @@ static char	*app_tx(char *final_str, char *original_str, int start, int end)
 	return (ft_strjoin_and_free(final_str, part));
 }
 
-static int	pro_var(char **final_str, char *original_str, int i, t_shell *shell)
+static int	pro_var(char **final_str, char *s, int i, t_shell *shell)
 {
-	char	*var_name;
-	char	*var_value;
+	char	*name;
+	char	*val;
 	int		start;
 
 	start = i;
-	while (original_str[i] && (ft_isalnum(original_str[i])
-			|| original_str[i] == '_' || original_str[i] == '?'))
+	while (s[i] && (ft_isalnum(s[i]) || s[i] == '_' || s[i] == '?'))
 		i++;
-	var_name = ft_substr(original_str, start, i - start);
-	var_value = find_var_value(var_name, shell);
-	if (ft_strcmp(var_name, "?") == 0)
-		*final_str = ft_strjoin_and_free(*final_str, var_value);
+	name = ft_substr(s, start, i - start);
+	val = find_var_value(name, shell);
+	if (ft_strcmp(name, "?") == 0)
+		*final_str = ft_strjoin_and_free(*final_str, val);
 	else
-		*final_str = ft_strjoin_and_free(*final_str, ft_strdup(var_value));
-	free(var_name);
+		*final_str = ft_strjoin_and_free(*final_str, ft_strdup(val));
+	free(name);
 	return (i);
 }
 

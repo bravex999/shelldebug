@@ -62,6 +62,8 @@ static void	wait_last_and_reap(pid_t last, int n, t_shell *sh)
 				sh->last_status = WEXITSTATUS(st);
 			else if (WIFSIGNALED(st))
 				sh->last_status = 128 + WTERMSIG(st);
+			if (WTERMSIG(st) == SIGINT)
+				write(STDOUT_FILENO, "\n", 1);
 		}
 		i++;
 	}
@@ -77,6 +79,8 @@ int	execute_pipeline(t_cmd *cmds, t_shell *sh)
 	prev = -1;
 	i = 0;
 	last = -1;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	while (cmds)
 	{
 		if (cmds->next && pipe(fd) == -1)
@@ -97,6 +101,7 @@ int	execute_pipeline(t_cmd *cmds, t_shell *sh)
 		i++;
 	}
 	wait_last_and_reap(last, i, sh);
+	setup_signals();
 	return (0);
 }
 

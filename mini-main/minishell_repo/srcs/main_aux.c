@@ -35,15 +35,14 @@ int	handle_ctrl_c(char **line, t_shell *shell)
 {
 	g_signal = 0;
 	shell->last_status = 130;
-	printf("\n");
+/*	printf("\n");*/
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_redisplay();
+/*	rl_redisplay();*/
 	free(*line);
 	*line = NULL;
 	return (1);
 }
-
 static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 {
 	t_cmd	*commands;

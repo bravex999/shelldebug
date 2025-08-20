@@ -60,7 +60,11 @@ static void	handle_wait_status(int status, t_shell *shell)
 	if (WIFEXITED(status))
 		shell->last_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
+	{
 		shell->last_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+	}		
 }
 
 static int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
@@ -77,17 +81,22 @@ static int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 	}
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (setup_heredoc_stdin(cmd, NULL) != 0)
 			exit(1);
 		execve(cmd_path, cmd->argv, shell->envp);
 		exit(127);
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	free(cmd_path);
 	while (waitpid(pid, &status, 0) == -1)
 	{
 		if (errno != EINTR)
 			break ;
 	}
+	setup_signals();
 	handle_wait_status(status, shell);
 	return (0);
 }
