@@ -15,3 +15,17 @@ int	has_redirections(t_token *token_list)
 	}
 	return (0);
 }
+
+int	has_pipes(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	while (current)
+	{
+		if (current->type == T_PIPE)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}

@@ -16,12 +16,11 @@ int	check_ctrl_d(char *line)
 	return (0);
 }
 
-int	handle_ctrl_c_signal(char **line)
+int	handle_ctrl_c_signal(char **line, t_shell *shell)
 {
-	printf("Checking g_signal: %d\n", g_signal);
 	if (g_signal == SIGINT)
 	{
-		return (handle_ctrl_c(line));
+		return (handle_ctrl_c(line, shell));
 	}	
 	return (0);
 }

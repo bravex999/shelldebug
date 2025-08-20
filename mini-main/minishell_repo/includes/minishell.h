@@ -27,5 +27,6 @@
 # include "heredoc.h"
 # include "path_resolver.h"
 # include "redirections.h"
+# include "pipes.h"
 
 #endif

@@ -52,6 +52,10 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 	close(p[1]);
 	content = read_all_fd(p[0]);
 	close(p[0]);
-	waitpid(pid, &status, 0);
+	while (waitpid(pid, &status, 0) == -1)
+	{
+		if (errno != EINTR)
+			break ;
+	}	
 	return (handle_heredoc_status(status, content, shell));
 }

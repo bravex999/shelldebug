@@ -1,22 +1,5 @@
 #include "minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (1);
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] == s2[i])
-			i++;
-		else
-			break ;
-	}		
-	return (s1[i] - s2[i]);
-}
-
 char	**ultra_split(t_token *token_list)
 {
 	int		i;
@@ -72,6 +55,14 @@ void	execute_builtin(t_cmd *cmd, t_shell *shell)
 	restore_stdin_from_saved(&saved_stdin);
 }
 
+static void	handle_wait_status(int status, t_shell *shell)
+{
+	if (WIFEXITED(status))
+		shell->last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		shell->last_status = 128 + WTERMSIG(status);
+}
+
 static int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
@@ -92,11 +83,12 @@ static int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 		exit(127);
 	}
 	free(cmd_path);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		shell->last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		shell->last_status = 128 + WTERMSIG(status);
+	while (waitpid(pid, &status, 0) == -1)
+	{
+		if (errno != EINTR)
+			break ;
+	}
+	handle_wait_status(status, shell);
 	return (0);
 }
 

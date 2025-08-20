@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 static void	process_tokens(t_token *tokens, char *line, t_shell *shell);
-int			handle_ctrl_c(char **line);
+int			handle_ctrl_c(char **line, t_shell *shell);
 
 void	start_loop(t_shell *shell)
 {
@@ -15,7 +15,7 @@ void	start_loop(t_shell *shell)
 		line = read_input();
 		if (check_ctrl_d(line))
 			break ;
-		if (handle_ctrl_c_signal(&line))
+		if (handle_ctrl_c_signal(&line, shell))
 		{
 		}
 		else
@@ -31,9 +31,10 @@ void	start_loop(t_shell *shell)
 	}
 }
 
-int	handle_ctrl_c(char **line)
+int	handle_ctrl_c(char **line, t_shell *shell)
 {
 	g_signal = 0;
+	shell->last_status = 130;
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -46,28 +47,44 @@ int	handle_ctrl_c(char **line)
 static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 {
 	t_cmd	*commands;
-	t_token	*original_tokens;
-	t_token	*expanded_tokens;
-	t_token	*final_tokens;
+	t_cmd	*pipeline_cmds;
+	t_token	*expanded;
+	t_token	*final;
 
 	commands = NULL;
-	original_tokens = tokens;
-	expanded_tokens = expand_tokens(original_tokens, shell);
-	free_tokens(original_tokens);
-	if (expanded_tokens)
+	pipeline_cmds = NULL;
+	expanded = expand_tokens(tokens, shell);
+	free_tokens(tokens);
+	if (!expanded)
 	{
-		final_tokens = finalize_and_join_tokens(expanded_tokens);
-		free_tokens(expanded_tokens);
-		commands = parse_tokens(final_tokens, shell);
+		shell->last_status = INVALID;
+		free_everything(line, NULL, NULL);
+		return ;
 	}
-	else
-		final_tokens = NULL;
+	final = finalize_and_join_tokens(expanded);
+	free_tokens(expanded);
+	if (has_pipes(final))
+	{
+		pipeline_cmds = parse_pipeline(final, shell);
+		if (!pipeline_cmds)
+		{
+			shell->last_status = INVALID;
+			free_everything(line, final, NULL);
+			return ;
+		}
+		execute_pipeline(pipeline_cmds, shell);
+		free_commands(pipeline_cmds);
+		free_everything(line, final, NULL);
+		return ;
+	}
+	commands = parse_tokens(final, shell);
 	if (!commands)
 	{
 		shell->last_status = INVALID;
-		free_everything(line, final_tokens, commands);
+		free_everything(line, final, NULL);
 		return ;
 	}
 	execute_commands(commands, shell);
-	free_everything(line, final_tokens, commands);
+	free_everything(line, final, commands);
 }
+
