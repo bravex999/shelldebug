@@ -9,5 +9,6 @@ int		check_ctrl_d(char *line);
 char	*read_input(void);
 int		handle_ctrl_c_signal(char **line, t_shell *shell);
 int		history(char *line);
+void    process_tokens(t_token *tokens, char *line, t_shell *shell);
 
 #endif

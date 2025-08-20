@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-static void	process_tokens(t_token *tokens, char *line, t_shell *shell);
 int			handle_ctrl_c(char **line, t_shell *shell);
 
 void	start_loop(t_shell *shell)
@@ -43,6 +42,17 @@ int	handle_ctrl_c(char **line, t_shell *shell)
 	*line = NULL;
 	return (1);
 }
+
+/*static void	print_syntax_error(char *token_str)
+{
+	write(2, "minishell: syntax error near unexpected token `", 47);
+	if (token_str)
+		write(2, token_str, ft_strlen(token_str));
+	else
+		write(2, "newline", 7);
+	write(2, "'\n", 2);
+}
+
 static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 {
 	t_cmd	*commands;
@@ -62,10 +72,16 @@ static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 	}
 	final = finalize_and_join_tokens(expanded);
 	free_tokens(expanded);
-	if (final && (check_initial_token(final) || check_all_pipe(final)))
+	if (final && (check_initial_token(final) || check_all_pipe(final)
+		|| check_all_redirections(final)))
 	{
 		shell->last_status = INVALID;
-		write (1, "\n", 1);
+		if (check_all_redirections(final))
+			print_syntax_error(NULL);
+		else if (check_initial_token(final))
+			print_syntax_error(final->str);
+		else
+			print_syntax_error("|");
 		free_everything(line, final, NULL);
 		return ;
 	}
@@ -75,6 +91,7 @@ static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 		if (!pipeline_cmds)
 		{
 			shell->last_status = INVALID;
+			print_syntax_error("|");
 			free_everything(line, final, NULL);
 			return ;
 		}
@@ -92,5 +109,5 @@ static void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 	}
 	execute_commands(commands, shell);
 	free_everything(line, final, commands);
-}
+}*/
 
