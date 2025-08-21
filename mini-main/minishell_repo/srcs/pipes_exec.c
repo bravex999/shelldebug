@@ -1,107 +1,67 @@
 #include "minishell.h"
+#include <signal.h>
+#include <errno.h>
+#include <unistd.h>
 
-static void	apply_redirs(t_cmd *c)
+/* Declaraciones de helpers implementadas en pipes_exec_2.c */
+void	exec_child_stage(t_pipe_stage *st);
+void	wait_last_and_reap(pid_t last, int n, t_shell *sh);
+
+static void	cleanup_fds(t_pipe_stage *st, int *fd)
 {
-	int	in;
-	int	out;
-
-	in = -1;
-	out = -1;
-	if (setup_input_redirection(c, &in) != 0)
-		exit(1);
-	if (setup_output_redirection(c, &out) != 0)
-		exit(1);
+	if (st->prev != -1)
+		close(st->prev);
+	if (!st->is_last)
+	{
+		close(fd[1]);
+		st->prev = fd[0];
+	}
+	else
+		st->prev = -1;
 }
 
-static void	exec_child_stage(t_cmd *c, int idx, int last, int prev, int nextfd[2], t_shell *sh)
+static int	run_stage(t_pipe_stage *st, t_cmd **next_cmd, pid_t *plast)
 {
-	char	*path;
+	int		fd[2];
+	pid_t	pid;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	if (setup_heredoc_stdin(c, NULL) != 0)
-		exit(1);
-	if (idx > 0 && !c->infile)
-		dup2(prev, STDIN_FILENO);
-	if (!last && !c->outfile)
-		dup2(nextfd[1], STDOUT_FILENO);
-	if (prev != -1)
-		close(prev);
-	if (!last)
-	{
-		close(nextfd[0]);
-		close(nextfd[1]);
-	}
-	apply_redirs(c);
-	if (is_builtin(c->argv[0]))
-	{
-		execute_builtin(c, sh);
-		exit(sh->last_status);
-	}
-	path = resolve_command_path(c->argv[0], sh);
-	if (!path)
-		exit(127);
-	execve(path, c->argv, sh->envp);
-	exit(127);
-}
-
-static void	wait_last_and_reap(pid_t last, int n, t_shell *sh)
-{
-	int		i;
-	int		st;
-	pid_t	p;
-
-	i = 0;
-	while (i < n)
-	{
-		while ((p = wait(&st)) == -1 && errno == EINTR)
-			;
-		if (p == last)
-		{
-			if (WIFEXITED(st))
-				sh->last_status = WEXITSTATUS(st);
-			else if (WIFSIGNALED(st))
-				sh->last_status = 128 + WTERMSIG(st);
-			if (WTERMSIG(st) == SIGINT)
-				write(STDOUT_FILENO, "\n", 1);
-		}
-		i++;
-	}
+	fd[0] = -1;
+	fd[1] = -1;
+	if (st->cmd->next && pipe(fd) == -1)
+		return (1);
+	st->is_last = (st->cmd->next == NULL);
+	st->nextfd[0] = fd[0];
+	st->nextfd[1] = fd[1];
+	pid = fork();
+	if (pid == -1)
+		return (1);
+	if (pid == 0)
+		exec_child_stage(st);
+	cleanup_fds(st, fd);
+	*plast = pid;
+	*next_cmd = st->cmd->next;
+	st->idx++;
+	return (0);
 }
 
 int	execute_pipeline(t_cmd *cmds, t_shell *sh)
 {
-	int		prev;
-	int		fd[2];
-	int		i;
-	pid_t	last;
+	t_pipe_stage	st;
+	pid_t			last;
 
-	prev = -1;
-	i = 0;
-	last = -1;
+	st.cmd = cmds;
+	st.idx = 0;
+	st.prev = -1;
+	st.sh = sh;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	while (cmds)
+	last = -1;
+	while (st.cmd)
 	{
-		if (cmds->next && pipe(fd) == -1)
+		if (run_stage(&st, &st.cmd, &last) != 0)
 			return (1);
-		last = fork();
-		if (last == 0)
-			exec_child_stage(cmds, i, (cmds->next == NULL), prev, fd, sh);
-		if (prev != -1)
-			close(prev);
-		if (cmds->next)
-		{
-			close(fd[1]);
-			prev = fd[0];
-		}
-		else
-			prev = -1;
-		cmds = cmds->next;
-		i++;
 	}
-	wait_last_and_reap(last, i, sh);
+	wait_last_and_reap(last, st.idx, sh);
 	setup_signals();
 	return (0);
 }
-

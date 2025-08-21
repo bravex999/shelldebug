@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static t_token	*copy_segment(t_token *a, t_token *b)
+t_token	*copy_segment(t_token *a, t_token *b)
 {
 	t_token	*head;
 	t_token	*cur;
@@ -22,8 +22,10 @@ static t_token	*copy_segment(t_token *a, t_token *b)
 	return (head);
 }
 
-static t_cmd	*parse_one_segment(t_token *seg, t_shell *sh)
+t_cmd	*parse_one_segment(t_token *seg, t_shell *sh)
 {
+	if (!seg)
+		return (NULL);
 	if (is_heredoc(seg))
 		return (build_heredoc_cmd(seg, sh));
 	if (has_redirections(seg))
@@ -35,14 +37,34 @@ static t_cmd	*parse_one_segment(t_token *seg, t_shell *sh)
 	return (NULL);
 }
 
+static int	append_cmd(t_cmd **head, t_cmd **tail, t_cmd *node)
+{
+	if (!node)
+		return (1);
+	node->next = NULL;
+	if (!*head)
+		*head = node;
+	else
+		(*tail)->next = node;
+	*tail = node;
+	return (0);
+}
+
+static int	append_last_segment(t_token *start, t_shell *sh,
+								t_cmd **head, t_cmd **tail)
+{
+	t_cmd	*node;
+
+	node = build_segment_cmd(start, NULL, sh);
+	return (append_cmd(head, tail, node));
+}
+
 t_cmd	*parse_pipeline(t_token *tokens, t_shell *sh)
 {
 	t_cmd	*head;
 	t_cmd	*tail;
 	t_token	*cur;
 	t_token	*start;
-	t_token	*seg;
-	t_cmd	*newc;
 
 	head = NULL;
 	tail = NULL;
@@ -52,36 +74,13 @@ t_cmd	*parse_pipeline(t_token *tokens, t_shell *sh)
 	{
 		if (cur->type == T_PIPE)
 		{
-			seg = copy_segment(start, cur);
-			newc = parse_one_segment(seg, sh);
-			free_tokens(seg);
-			if (!newc)
-				return (free_pipeline_list(head), NULL);
-			newc->next = NULL;
-			if (!head)
-				head = newc;
-			else
-				tail->next = newc;
-			tail = newc;
+			if (append_cmd(&head, &tail, build_segment_cmd(start, cur, sh)))
+				return (free_commands(head), NULL);
 			start = cur->next;
 		}
 		cur = cur->next;
 	}
-	seg = copy_segment(start, NULL);
-	newc = parse_one_segment(seg, sh);
-	free_tokens(seg);
-	if (!newc)
-		return (free_pipeline_list(head), NULL);
-	newc->next = NULL;
-	if (!head)
-		head = newc;
-	else
-		tail->next = newc;
+	if (append_last_segment(start, sh, &head, &tail))
+		return (free_commands(head), NULL);
 	return (head);
-}
-
-void	free_pipeline_list(t_cmd *cmds)
-{
-	if (cmds)
-		free_commands(cmds);
 }

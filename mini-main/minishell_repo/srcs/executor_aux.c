@@ -55,7 +55,7 @@ void	execute_builtin(t_cmd *cmd, t_shell *shell)
 	restore_stdin_from_saved(&saved_stdin);
 }
 
-static void	handle_wait_status(int status, t_shell *shell)
+void	handle_wait_status(int status, t_shell *shell)
 {
 	if (WIFEXITED(status))
 		shell->last_status = WEXITSTATUS(status);
@@ -65,40 +65,6 @@ static void	handle_wait_status(int status, t_shell *shell)
 		if (WTERMSIG(status) == SIGINT)
 			write(STDOUT_FILENO, "\n", 1);
 	}		
-}
-
-static int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		free(cmd_path);
-		return (-1);
-	}
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		if (setup_heredoc_stdin(cmd, NULL) != 0)
-			exit(1);
-		execve(cmd_path, cmd->argv, shell->envp);
-		exit(127);
-	}
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	free(cmd_path);
-	while (waitpid(pid, &status, 0) == -1)
-	{
-		if (errno != EINTR)
-			break ;
-	}
-	setup_signals();
-	handle_wait_status(status, shell);
-	return (0);
 }
 
 void	run_external(t_cmd *cmd, t_shell *shell)
