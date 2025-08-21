@@ -11,9 +11,9 @@ void	ex_child(int write_fd, char *delimiter, int quoted, t_shell *shell)
 	{
 		write(write_fd, buf, ft_strlen(buf));
 		free(buf);
-		exit(0);
+		exit(EXIT_OK);
 	}
-	exit(130);
+	exit(SIGINT_EXIT);
 }
 
 char	*handle_heredoc_status(int status, char *content, t_shell *shell)
@@ -24,7 +24,7 @@ char	*handle_heredoc_status(int status, char *content, t_shell *shell)
 		write(STDOUT_FILENO, "\n", 1);
 		if (content)
 			free(content);
-		shell->last_status = 130;
+		shell->last_status = SIGINT_EXIT;
 		g_signal = 0;
 		return (NULL);
 	}

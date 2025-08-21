@@ -33,7 +33,7 @@ void	start_loop(t_shell *shell)
 int	handle_ctrl_c(char **line, t_shell *shell)
 {
 	g_signal = 0;
-	shell->last_status = 130;
+	shell->last_status = SIGINT_EXIT;
 /*	printf("\n");*/
 	rl_on_new_line();
 	rl_replace_line("", 0);

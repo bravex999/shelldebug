@@ -8,9 +8,9 @@ static void	apply_redirs(t_cmd *c)
 	in = -1;
 	out = -1;
 	if (setup_input_redirection(c, &in) != 0)
-		exit(1);
+		exit(EXIT_KO);
 	if (setup_output_redirection(c, &out) != 0)
-		exit(1);
+		exit(EXIT_KO);
 }
 
 static void	exec_command(t_pipe_stage *st)
@@ -24,9 +24,9 @@ static void	exec_command(t_pipe_stage *st)
 	}
 	path = resolve_command_path(st->cmd->argv[0], st->sh);
 	if (!path)
-		exit(127);
+		exit(UNKNOWN_COMMAND);
 	execve(path, st->cmd->argv, st->sh->envp);
-	exit(127);
+	exit(UNKNOWN_COMMAND);
 }
 
 void	exec_child_stage(t_pipe_stage *st)
@@ -34,7 +34,7 @@ void	exec_child_stage(t_pipe_stage *st)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (setup_heredoc_stdin(st->cmd, NULL) != 0)
-		exit(1);
+		exit(EXIT_KO);
 	if (st->idx > 0 && !st->cmd->infile)
 		dup2(st->prev, STDIN_FILENO);
 	if (!st->is_last && !st->cmd->outfile)

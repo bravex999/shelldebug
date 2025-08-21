@@ -5,9 +5,9 @@ static void	setup_child_and_exec(char *cmd_path, t_cmd *cmd, t_shell *shell)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (setup_heredoc_stdin(cmd, NULL) != 0)
-		exit(1);
+		exit(EXIT_KO);
 	execve(cmd_path, cmd->argv, shell->envp);
-	exit(127);
+	exit(UNKNOWN_COMMAND);
 }
 
 int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
