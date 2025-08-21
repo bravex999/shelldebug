@@ -24,10 +24,32 @@ static void	exec_command(t_pipe_stage *st)
 	}
 	path = resolve_command_path(st->cmd->argv[0], st->sh);
 	if (!path)
+	{
+		write(STDERR_FILENO, st->cmd->argv[0], ft_strlen(st->cmd->argv[0]));
+		write(STDERR_FILENO, ": command not found\n", 20);
+		exit(UNKNOWN_COMMAND);
+	}
+	execve(path, st->cmd->argv, st->sh->envp);
+	write(STDERR_FILENO, st->cmd->argv[0], ft_strlen(st->cmd->argv[0]));
+	write(STDERR_FILENO, ": command not found\n", 20);
+	exit(UNKNOWN_COMMAND);
+}
+
+/*static void	exec_command(t_pipe_stage *st)
+{
+	char	*path;
+
+	if (is_builtin(st->cmd->argv[0]))
+	{
+		execute_builtin(st->cmd, st->sh);
+		exit(st->sh->last_status);
+	}
+	path = resolve_command_path(st->cmd->argv[0], st->sh);
+	if (!path)
 		exit(UNKNOWN_COMMAND);
 	execve(path, st->cmd->argv, st->sh->envp);
 	exit(UNKNOWN_COMMAND);
-}
+}*/
 
 void	exec_child_stage(t_pipe_stage *st)
 {
