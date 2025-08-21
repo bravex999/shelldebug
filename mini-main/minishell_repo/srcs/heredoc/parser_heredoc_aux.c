@@ -54,19 +54,19 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 
 	if (pipe(p) == -1)
 		return (NULL);
-	g_in_heredoc = 1;
+	set_sigint_heredoc();
 	pid = fork();
 	if (pid == -1)
 	{
 		close(p[0]);
 		close(p[1]);
-		g_in_heredoc = 0;
+		set_sigint_interactive();
 		return (NULL);
 	}
 	if (pid == 0)
 		ex_child(p[1], delimiter, quoted, shell);
 	close(p[1]);
 	content = hd_collect(p[0], pid, &status);
-	g_in_heredoc = 0;
+	set_sigint_interactive();
 	return (handle_heredoc_status(status, content, shell));
 }

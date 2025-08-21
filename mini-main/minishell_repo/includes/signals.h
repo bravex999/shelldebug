@@ -4,9 +4,9 @@
 # define SIGNALS_H
 
 extern volatile sig_atomic_t	g_signal;
-extern volatile sig_atomic_t	g_in_heredoc;
 
 void	setup_signals(void);
-void	signal_handler(int signo);
+void	set_sigint_interactive(void);
+void	set_sigint_heredoc(void);
 
 #endif

@@ -12,6 +12,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/ioctl.h>
 
 // Headers internos del proyecto
 # include "shell.h"  
