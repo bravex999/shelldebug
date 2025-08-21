@@ -60,15 +60,15 @@ void	handle_wait_status(int status, t_shell *shell)
 	if (WIFEXITED(status))
 	{
 		shell->last_status = WEXITSTATUS(status);
-		if (shell->last_status == 130)       
-			write(STDOUT_FILENO, "\n", 1);  
+		if (shell->last_status == 130)
+			shell->need_newline = 1;		      		  
 		return;
 	}
 	if (WIFSIGNALED(status))
 	{
 		shell->last_status = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGINT)
-			write(STDOUT_FILENO, "\n", 1);
+			shell->need_newline = 1;	
 		return;
 	}
 }

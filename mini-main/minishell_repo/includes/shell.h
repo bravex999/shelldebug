@@ -6,6 +6,7 @@ typedef struct s_shell {
 	int				last_status;
 	int				running;
 	struct s_cmd	*cmds;
+	int		need_newline; // ojo eliminar
 }					t_shell;
 
 void	init_shell(t_shell *shell, char **envp);

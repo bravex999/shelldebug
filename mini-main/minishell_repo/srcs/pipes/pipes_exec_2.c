@@ -63,8 +63,8 @@ static void	update_status(pid_t p, pid_t last, int st, t_shell *sh)
 		else if (WIFSIGNALED(st))
 		{
 			sh->last_status = 128 + WTERMSIG(st);
-			if (WTERMSIG(st) == SIGINT)
-				write(STDOUT_FILENO, "\n", 1);
+			if (WTERMSIG(st) == SIGINT) 
+				sh->need_newline = 1;   			 			
 		}
 	}
 }

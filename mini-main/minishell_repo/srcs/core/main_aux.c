@@ -10,7 +10,12 @@ void	start_loop(t_shell *shell)
 	line = NULL;
 	tokens = NULL;
 	while (shell->running)
-	{
+	{	
+		if (shell->need_newline)               /* [ADDED] */
+		{
+			write(STDOUT_FILENO, "\n", 1);    /* [ADDED] */
+			shell->need_newline = 0;          /* [ADDED] */
+		}
 		line = read_input();
 		if (check_ctrl_d(line))
 			break ;
