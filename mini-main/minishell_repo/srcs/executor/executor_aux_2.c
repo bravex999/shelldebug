@@ -15,9 +15,11 @@ int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 	pid_t	pid;
 	int		status;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 	{
+		setup_signals(); 
 		perror("fork");
 		free(cmd_path);
 		return (-1);
@@ -32,5 +34,6 @@ int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 			break ;
 	setup_signals();
 	handle_wait_status(status, shell);
+	g_signal = 0;
 	return (0);
 }

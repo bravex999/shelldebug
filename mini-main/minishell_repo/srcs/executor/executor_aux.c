@@ -58,13 +58,19 @@ void	execute_builtin(t_cmd *cmd, t_shell *shell)
 void	handle_wait_status(int status, t_shell *shell)
 {
 	if (WIFEXITED(status))
+	{
 		shell->last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
+		if (shell->last_status == 130)       
+			write(STDOUT_FILENO, "\n", 1);  
+		return;
+	}
+	if (WIFSIGNALED(status))
 	{
 		shell->last_status = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGINT)
 			write(STDOUT_FILENO, "\n", 1);
-	}		
+		return;
+	}
 }
 
 void	run_external(t_cmd *cmd, t_shell *shell)

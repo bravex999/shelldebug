@@ -55,7 +55,11 @@ static void	update_status(pid_t p, pid_t last, int st, t_shell *sh)
 	if (p == last)
 	{
 		if (WIFEXITED(st))
+		{	
 			sh->last_status = WEXITSTATUS(st);
+			if (sh->last_status == 130)          
+				write(STDOUT_FILENO, "\n", 1);
+		}		
 		else if (WIFSIGNALED(st))
 		{
 			sh->last_status = 128 + WTERMSIG(st);
@@ -75,13 +79,12 @@ void	wait_last_and_reap(pid_t last, int n, t_shell *sh)
 	while (i < n)
 	{
 		p = wait(&st);
+		while (p == -1 && errno == EINTR)
+			p = wait(&st);
 		if (p == -1)
-		{
-			if (errno == EINTR)
-				continue ;
-			break ;
-		}
+			break;
 		update_status(p, last, st, sh);
 		i++;
 	}
+	g_signal = 0; 
 }
