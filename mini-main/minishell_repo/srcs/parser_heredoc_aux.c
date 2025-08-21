@@ -40,11 +40,13 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 
 	if (pipe(p) == -1)
 		return (NULL);
+	g_in_heredoc = 1; 	
 	pid = fork();
 	if (pid == -1)
 	{
 		close(p[0]);
 		close(p[1]);
+		g_in_heredoc = 0;
 		return (NULL);
 	}
 	if (pid == 0)
@@ -56,6 +58,7 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 	{
 		if (errno != EINTR)
 			break ;
-	}	
+	}
+	g_in_heredoc = 0;
 	return (handle_heredoc_status(status, content, shell));
 }

@@ -2,16 +2,19 @@
 #include <sys/ioctl.h>
 
 volatile sig_atomic_t	g_signal = 0;
+volatile sig_atomic_t	g_in_heredoc = 0;
 
 void	signal_handler(int signo)
 {
 	g_signal = signo;
 	if (signo == SIGINT)
 	{
-		write(1, "\n", 1);
+		if(!g_in_heredoc)
+			write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-/*		rl_redisplay();*/
+		if (!g_in_heredoc)
+			rl_redisplay();
 	}
 }
 
