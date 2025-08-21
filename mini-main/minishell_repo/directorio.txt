@@ -1,1 +1,0 @@
-/home/naranjox/minishell/minishell_repo
