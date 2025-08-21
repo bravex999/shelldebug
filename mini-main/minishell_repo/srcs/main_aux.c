@@ -16,6 +16,7 @@ void	start_loop(t_shell *shell)
 			break ;
 		if (handle_ctrl_c_signal(&line, shell))
 		{
+			g_signal = 0;
 		}
 		else
 		{
