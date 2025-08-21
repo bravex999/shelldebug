@@ -9,17 +9,18 @@ void	start_loop(t_shell *shell)
 
 	line = NULL;
 	tokens = NULL;
+	g_signal = 0;
 	while (shell->running)
 	{	
-		if (shell->need_newline)               /* [ADDED] */
+		if (shell->need_newline)
 		{
-			write(STDOUT_FILENO, "\n", 1);    /* [ADDED] */
-			shell->need_newline = 0;          /* [ADDED] */
+			write(STDOUT_FILENO, "\n", 1);
+			shell->need_newline = 0;
 		}
 		line = read_input();
 		if (check_ctrl_d(line))
 			break ;
-		if (handle_ctrl_c_signal(&line, shell))
+		if (g_signal == SIGINT && handle_ctrl_c_signal(&line, shell))
 		{
 			g_signal = 0;
 		}
