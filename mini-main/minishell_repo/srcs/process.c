@@ -13,7 +13,7 @@ static void	print_syntax_error(char *token_str)
 static int	check_syntax_errors(t_token *final, t_shell *shell)
 {
 	if (final && (check_initial_token(final) || check_all_pipe(final)
-		|| check_all_redirections(final)))
+			|| check_all_redirections(final)))
 	{
 		shell->last_status = INVALID;
 		if (check_all_redirections(final))

@@ -31,6 +31,20 @@ char	*handle_heredoc_status(int status, char *content, t_shell *shell)
 	return (content);
 }
 
+static char	*hd_collect(int rfd, pid_t pid, int *st)
+{
+	char	*content;
+
+	content = read_all_fd(rfd);
+	close(rfd);
+	while (waitpid(pid, st, 0) == -1)
+	{
+		if (errno != EINTR)
+			break ;
+	}
+	return (content);
+}
+
 char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 {
 	int		p[2];
@@ -40,7 +54,7 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 
 	if (pipe(p) == -1)
 		return (NULL);
-	g_in_heredoc = 1; 	
+	g_in_heredoc = 1;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -52,13 +66,7 @@ char	*heredoc_collect(char *delimiter, int quoted, t_shell *shell)
 	if (pid == 0)
 		ex_child(p[1], delimiter, quoted, shell);
 	close(p[1]);
-	content = read_all_fd(p[0]);
-	close(p[0]);
-	while (waitpid(pid, &status, 0) == -1)
-	{
-		if (errno != EINTR)
-			break ;
-	}
+	content = hd_collect(p[0], pid, &status);
 	g_in_heredoc = 0;
 	return (handle_heredoc_status(status, content, shell));
 }
