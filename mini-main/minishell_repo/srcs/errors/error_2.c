@@ -24,4 +24,3 @@ void	error_exit_numeric_required(char *arg)
 {
 	print_error("exit", arg, "numeric argument required");
 }
-

@@ -45,6 +45,22 @@ static int	check_redir(int result, int *saved_stdin, int *saved_stdout)
 	return (0);
 }
 
+static int	only_redirs_set_status(t_cmd *cmd, t_shell *sh)
+{
+	int	st;
+
+	if (cmd && (!cmd->argv || !cmd->argv[0]))
+	{
+		st = handle_only_redirections(cmd);
+		if (st == 0)
+			sh->last_status = 0;
+		else
+			sh->last_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
 void	execute_commands(t_cmd *commands, t_shell *shell)
 {
 	int	saved_stdin;
@@ -52,16 +68,18 @@ void	execute_commands(t_cmd *commands, t_shell *shell)
 
 	saved_stdout = -1;
 	saved_stdin = -1;
-	if (!commands || !commands->argv || !commands->argv[0])
+	if (!commands)
+		return ;
+	if (only_redirs_set_status(commands, shell))
 		return ;
 	if (check_redir(setup_heredoc_stdin(commands, &saved_stdin),
 			&saved_stdin, &saved_stdout))
 		return ;
-	if (check_redir(setup_input_redirection(commands,
-				&saved_stdin), &saved_stdin, &saved_stdout))
+	if (check_redir(setup_input_redirection(commands, &saved_stdin),
+			&saved_stdin, &saved_stdout))
 		return ;
-	if (check_redir(setup_output_redirection(commands,
-				&saved_stdout), &saved_stdin, &saved_stdout))
+	if (check_redir(setup_output_redirection(commands, &saved_stdout),
+			&saved_stdin, &saved_stdout))
 		return ;
 	if (is_builtin(commands->argv[0]))
 		execute_builtin(commands, shell);

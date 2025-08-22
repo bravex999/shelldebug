@@ -35,7 +35,7 @@ t_cmd	*words_plus_cmd(t_token *token_list)
 	return (new_command);
 }
 
-static	t_token	*process_single_redirection(t_cmd *cmd, t_token *current)
+/*static	t_token	*process_single_redirection(t_cmd *cmd, t_token *current)
 {
 	if (current->type == T_REDIR_IN && current->next)
 	{
@@ -61,7 +61,7 @@ static	t_token	*process_single_redirection(t_cmd *cmd, t_token *current)
 		return (current->next->next);
 	}
 	return (current->next);
-}
+}*/
 
 static void	extract_redirections(t_cmd *cmd, t_token *token_list)
 {

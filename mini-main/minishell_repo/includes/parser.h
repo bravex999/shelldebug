@@ -29,5 +29,6 @@ int		has_redirections(t_token *token_list);
 t_cmd	*build_command_with_redirections(t_token *token_list);
 t_token	*filter_argv_tokens(t_token *token_list);
 int		has_pipes(t_token *token_list);
+t_token	*process_single_redirection(t_cmd *cmd, t_token *current);
 
 #endif

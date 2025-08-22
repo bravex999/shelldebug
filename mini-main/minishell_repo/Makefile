@@ -18,10 +18,10 @@ DIR_BUILT   = built
 # --- Listas por familia (solo nombres de archivo) ---
 SRCS_CORE    = main.c signals.c shell.c main_aux.c main_aux_input.c
 SRCS_LEXER   = tokenizer.c tokenizer_aux.c handle_quotes.c
-SRCS_PARSER  = parser.c parser_check.c parser_aux.c parser_aux_2.c parser_extension.c
+SRCS_PARSER  = parser.c parser_check.c parser_aux.c parser_aux_2.c parser_extension.c parser_extension_2.c
 SRCS_HEREDOC = parser_heredoc.c parser_heredoc_aux.c heredoc.c heredoc_aux.c
 SRCS_EXPAND  = expander.c expander_ultra.c expander_ultra_aux.c expander_finalizer.c
-SRCS_EXEC    = executor.c executor_2.c executor_aux.c executor_aux_2.c redirections.c path_resolver.c process.c
+SRCS_EXEC    = executor.c executor_2.c executor_aux.c executor_aux_2.c redirections.c path_resolver.c process.c exec_redirs_only.c
 SRCS_PIPES   = pipes.c pipes_2.c pipes_exec.c pipes_exec_2.c
 SRCS_ERRORS  = error.c error_2.c error_vali.c
 SRCS_UTILS   = free_every.c general_aux.c

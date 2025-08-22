@@ -13,5 +13,6 @@ void	run_external(t_cmd *cmd, t_shell *shell);
 int		is_builtin(char *cmd);
 int		create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell);
 void	handle_wait_status(int status, t_shell *shell);
+int		handle_only_redirections(t_cmd *cmd);
 
 #endif

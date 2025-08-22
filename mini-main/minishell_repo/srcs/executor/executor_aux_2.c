@@ -19,7 +19,7 @@ int	create_and_wait_child(char *cmd_path, t_cmd *cmd, t_shell *shell)
 	pid = fork();
 	if (pid == -1)
 	{
-		setup_signals(); 
+		setup_signals();
 		perror("fork");
 		free(cmd_path);
 		return (-1);

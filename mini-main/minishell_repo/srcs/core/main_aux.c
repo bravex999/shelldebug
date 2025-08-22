@@ -2,7 +2,45 @@
 
 int			handle_ctrl_c(char **line, t_shell *shell);
 
+static void	process_read_line(char **line, t_shell *shell)
+{
+	t_token	*tokens;
+
+	if (g_signal == SIGINT && handle_ctrl_c_signal(line, shell))
+	{
+		g_signal = 0;
+		return ;
+	}
+	if (isatty(STDIN_FILENO) && history(*line))
+		add_history(*line);
+	tokens = tokenize_line(*line, shell);
+	if (tokens)
+		process_tokens(tokens, *line, shell);
+	else
+		free(*line);
+}
+
 void	start_loop(t_shell *shell)
+{
+	char	*line;
+
+	line = NULL;
+	g_signal = 0;
+	while (shell->running)
+	{
+		if (shell->need_newline)
+		{
+			write(STDOUT_FILENO, "\n", 1);
+			shell->need_newline = 0;
+		}
+		line = read_input();
+		if (check_ctrl_d(line))
+			break ;
+		process_read_line(&line, shell);
+	}
+}
+
+/*void	start_loop(t_shell *shell)
 {
 	char	*line;
 	t_token	*tokens;
@@ -21,9 +59,7 @@ void	start_loop(t_shell *shell)
 		if (check_ctrl_d(line))
 			break ;
 		if (g_signal == SIGINT && handle_ctrl_c_signal(&line, shell))
-		{
 			g_signal = 0;
-		}
 		else
 		{
 			if (isatty(STDIN_FILENO) && history(line))
@@ -35,16 +71,14 @@ void	start_loop(t_shell *shell)
 				free(line);
 		}
 	}
-}
+}*/
 
 int	handle_ctrl_c(char **line, t_shell *shell)
 {
 	g_signal = 0;
 	shell->last_status = SIGINT_EXIT;
-/*	printf("\n");*/
 	rl_on_new_line();
 	rl_replace_line("", 0);
-/*	rl_redisplay();*/
 	free(*line);
 	*line = NULL;
 	return (1);
