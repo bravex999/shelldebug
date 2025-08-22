@@ -1,0 +1,30 @@
+echo OK
+echo -n NO_NL
+echo '$HOME' | grep -c '\$'
+echo "$HOME" | grep -c /
+false
+echo $?
+ls -l | grep "\.c" | wc -l
+ls | grep "Makefile" | wc -c | cat -e
+cat /dev/null | grep "hola" | wc -l
+ps aux | grep -i "bash" | grep -v "grep" | wc -l
+cat /etc/passwd | head -n 10 | tail -n 2
+ls | comandoinexistente | wc -l
+comandoquenoexiste | grep "a" | wc -l
+ls -l | grep ".c" | comandoerroneo
+printf "one\n"
+printf "one\ntwo\n" | wc -l
+echo redir1 > /tmp/ms_r1
+cat < /tmp/ms_r1
+echo append >> /tmp/ms_r1
+cat /tmp/ms_r1
+cat <<EOF | wc -l
+line1
+line2
+EOF
+cat <<'X' | grep -c '\$HOME'
+$HOME
+X
+echo "a|b>c" | wc -c
+exit
+

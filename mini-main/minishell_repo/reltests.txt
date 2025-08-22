@@ -1,0 +1,10 @@
+./reltest/bin/echo R1_OK
+reltest/bin/echo R2_OK
+./reltest/./bin/./echo DOTS_OK
+reltest/a/../bin/echo UP_ONE_OK
+./reltest/a/b/../../bin/echo UP_TWO_OK
+./reltest/bin/echo X > reltest/a/../out.txt
+./reltest/bin/cat reltest/out.txt
+./reltest/a/../../reltest/bin/printf "A\nB\n" | ./reltest/bin/cat
+./reltest/no_existe
+./reltest/bin/echo/

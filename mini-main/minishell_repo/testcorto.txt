@@ -1,0 +1,7 @@
+|
+ls |
+cat <
+echo a | cat | cat | cat | cat | cat | cat | cat | cat | cat | wc -l
+echo "unclosed
+cat <<EOF
+

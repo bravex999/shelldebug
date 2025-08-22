@@ -1,0 +1,27 @@
+rm -f /tmp/ms_o1 /tmp/ms_o2 /tmp/ms_wc /tmp/a /tmp/b /tmp/ms_in1 /tmp/ms_in2
+printf "IN1\n" > /tmp/ms_in1
+printf "IN2\n" > /tmp/ms_in2
+echo uno > /tmp/ms_o1
+cat /tmp/ms_o1
+echo dos >> /tmp/ms_o1
+cat /tmp/ms_o1
+cat < /tmp/ms_in1
+cat < /tmp/ms_in2
+grep IN /tmp/ms_in1 > /tmp/ms_o2
+cat /tmp/ms_o2
+echo hola | wc -c > /tmp/ms_wc
+cat /tmp/ms_wc
+printf "a\nb\n" | wc -l >> /tmp/ms_wc
+cat /tmp/ms_wc
+echo multi > /tmp/a > /tmp/b
+cat /tmp/a
+cat /tmp/b
+echo Z >> /tmp/a >> /tmp/b
+cat /tmp/a
+cat /tmp/b
+cat < /tmp/ms_in1 < /tmp/ms_in2
+echo x > /no/such/dir/file
+cat < /no/such/infile
+> /tmp/onlyredir
+cat /tmp/onlyredir
+
