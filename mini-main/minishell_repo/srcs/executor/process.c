@@ -60,7 +60,6 @@ static void	execute_token_list(t_token *final, t_shell *shell)
 	exec_branch(final, shell, is_pipe);
 }
 
-
 /*static void	execute_token_list(t_token *final, t_shell *shell)
 {
 	t_cmd	*commands;

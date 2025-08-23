@@ -68,4 +68,3 @@ void	restore_stdin_from_saved(int *saved_stdin)
 		*saved_stdin = -1;
 	}
 }
-

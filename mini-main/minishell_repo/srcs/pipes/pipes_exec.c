@@ -3,7 +3,6 @@
 #include <errno.h>
 #include <unistd.h>
 
-
 void	exec_child_stage(t_pipe_stage *st);
 void	wait_last_and_reap(pid_t last, int n, t_shell *sh);
 

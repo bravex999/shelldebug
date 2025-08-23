@@ -24,10 +24,8 @@ static char	*search_in_path_dirs(char *cmd, char **path_dirs)
 		full_path = build_full_path(path_dirs[i], cmd);
 		if (!full_path)
 			return (NULL);
-		if (access(full_path, F_OK) == 0)         // solo existencia
-			return (full_path);	
-/*		if (access(full_path, F_OK | X_OK) == 0)
-			return (full_path);*/
+		if (access(full_path, F_OK) == 0)
+			return (full_path);
 		free(full_path);
 		i++;
 	}

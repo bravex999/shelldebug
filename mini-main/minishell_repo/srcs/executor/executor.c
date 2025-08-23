@@ -51,7 +51,6 @@ static int	only_redirs_set_status(t_cmd *cmd, t_shell *sh)
 	return (0);
 }
 
-
 static int	prep(t_cmd *c, t_shell *sh, int *in, int *out)
 {
 	if (check_redir(setup_heredoc_stdin(c, in), in, out))
