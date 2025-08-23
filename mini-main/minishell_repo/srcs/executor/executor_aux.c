@@ -69,6 +69,10 @@ void	handle_wait_status(int status, t_shell *shell)
 		shell->last_status = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGINT)
 			shell->need_newline = 1;
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19); 
+		}	
 		return ;
 	}
 }

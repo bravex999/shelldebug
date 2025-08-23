@@ -27,7 +27,41 @@ static int	check_syntax_errors(t_token *final, t_shell *shell)
 	return (0);
 }
 
+static void	exec_branch(t_token *final, t_shell *shell, int is_pipe)
+{
+	t_cmd	*commands;
+
+	commands = NULL;
+	if (is_pipe)
+		commands = parse_pipeline(final, shell);
+	else
+		commands = parse_tokens(final, shell);
+	if (!commands)
+	{
+		if (shell->last_status == SIGINT_EXIT && is_heredoc(final))
+			return ;
+		shell->last_status = INVALID;
+		if (is_pipe)
+			print_syntax_error("|");
+		return ;
+	}
+	if (is_pipe)
+		execute_pipeline(commands, shell);
+	else
+		execute_commands(commands, shell);
+	free_commands(commands);
+}
+
 static void	execute_token_list(t_token *final, t_shell *shell)
+{
+	int	is_pipe;
+
+	is_pipe = has_pipes(final);
+	exec_branch(final, shell, is_pipe);
+}
+
+
+/*static void	execute_token_list(t_token *final, t_shell *shell)
 {
 	t_cmd	*commands;
 
@@ -35,7 +69,9 @@ static void	execute_token_list(t_token *final, t_shell *shell)
 	{
 		commands = parse_pipeline(final, shell);
 		if (!commands)
-		{
+		{	
+			if (shell->last_status == SIGINT_EXIT && is_heredoc(final))
+				return;
 			shell->last_status = INVALID;
 			print_syntax_error("|");
 			return ;
@@ -47,13 +83,15 @@ static void	execute_token_list(t_token *final, t_shell *shell)
 		commands = parse_tokens(final, shell);
 		if (!commands)
 		{
+			if (shell->last_status == SIGINT_EXIT && is_heredoc(final))
+				return;
 			shell->last_status = INVALID;
 			return ;
 		}
 		execute_commands(commands, shell);
 	}
 	free_commands(commands);
-}
+}*/
 
 void	process_tokens(t_token *tokens, char *line, t_shell *shell)
 {
