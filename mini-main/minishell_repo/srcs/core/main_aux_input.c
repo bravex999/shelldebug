@@ -18,12 +18,36 @@ int	check_ctrl_d(char *line)
 
 int	handle_ctrl_c_signal(char **line, t_shell *shell)
 {
+	char	*p;
+
+	if (g_signal != SIGINT)
+		return (0);
+	shell->last_status = SIGINT_EXIT;
+	p = *line;
+	while (p && (*p == ' ' || *p == '\t'))
+		p++;
+	if (!p || *p == '\0')
+	{
+		g_signal = 0;
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		free(*line);
+		*line = NULL;
+		return (1);
+	}
+	g_signal = 0;
+	return (0);
+}
+
+
+/*int	handle_ctrl_c_signal(char **line, t_shell *shell)
+{
 	if (g_signal == SIGINT)
 	{
 		return (handle_ctrl_c(line, shell));
 	}	
 	return (0);
-}
+}*/
 
 int	history(char *line)
 {
