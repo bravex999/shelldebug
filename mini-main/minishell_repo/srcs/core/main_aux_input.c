@@ -39,7 +39,6 @@ int	handle_ctrl_c_signal(char **line, t_shell *shell)
 	return (0);
 }
 
-
 /*int	handle_ctrl_c_signal(char **line, t_shell *shell)
 {
 	if (g_signal == SIGINT)
