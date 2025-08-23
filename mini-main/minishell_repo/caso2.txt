@@ -1,0 +1,122 @@
+make -n | grep -E "(-Wall|-Wextra|-Werror)"
+make
+make
+/bin/ls
+/bin/ls -l
+/bin/echo hola mundo
+/bin/ls archivo_que_no_existe
+echo $?
+/bin/pwd
+/bin/cat /etc/hosts
+/bin/ls -la /
+/bin/grep root /etc/passwd
+
+echo
+     
+echo hola
+echo -n hola
+echo -n "hola mundo"
+echo ""
+echo "   "
+echo hola "mundo"
+echo "hola mundo"
+echo "hola    mundo"
+echo hola""mundo
+echo "$USER"
+echo '$USER'
+
+/bin/ls archivo_que_no_existe
+echo $?
+expr $? + $?
+
+/usr/bin/env
+env
+
+export VAR1=uno
+env | grep ^VAR1=
+export VAR1=dos
+env | grep ^VAR1=
+unset VAR1
+env | grep ^VAR1=
+
+pwd
+cd /
+pwd
+cd ..
+pwd
+cd .
+pwd
+cd noexiste
+pwd
+
+ls ./srcs
+ls ../
+
+unset PATH
+ls
+export PATH=/bin:/usr/bin
+ls
+
+echo uno > t.txt
+echo dos >> t.txt
+cat < t.txt
+echo A > out1.txt > out2.txt
+cat out1.txt
+cat out2.txt
+cat < t.txt < /etc/hosts
+
+cat <<EOF
+hola
+mundo
+EOF
+cat << "EOF"
+$USER
+EOF
+cat <<EOF | /bin/grep hola
+hola
+mundo
+EOF
+
+ls | wc -l
+cat /etc/passwd | grep root | wc -l
+echo hola | cat | wc -c
+ls archivo_que_no_existe | grep bla | wc -l
+
+echo "cat lol.c | cat > lol.c"
+echo "hola    mundo"
+echo "a b c"
+echo '$USER'
+echo ''
+echo '   '
+echo 'a b | c > d'
+
+echo "echo hola" > /tmp/noexec.sh
+/bin/chmod 644 /tmp/noexec.sh
+/tmp/noexec.sh
+echo $?
+/bin
+echo $?
+echo hola > /tmp/badfmt
+/bin/chmod 755 /tmp/badfmt
+/tmp/badfmt
+echo $?
+nosuchcmd
+echo $?
+
+echo ok | /tmp/noexec.sh
+echo $?
+echo ok | /bin
+echo $?
+echo ok | nosuchcmd
+echo $?
+
+ls > /no/such/dir/out.txt
+echo $?
+
+echo hola > a.txt
+echo mundo > b.txt
+cat < a.txt < b.txt
+echo hola > x.txt > y.txt
+cat x.txt
+cat y.txt
+

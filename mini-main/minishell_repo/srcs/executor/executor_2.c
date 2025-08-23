@@ -58,3 +58,14 @@ int	setup_heredoc_stdin(t_cmd *cmd, int *saved_stdin)
 		return (-1);
 	return (0);
 }
+
+void	restore_stdin_from_saved(int *saved_stdin)
+{
+	if (saved_stdin && *saved_stdin != -1)
+	{
+		dup2(*saved_stdin, STDIN_FILENO);
+		close(*saved_stdin);
+		*saved_stdin = -1;
+	}
+}
+

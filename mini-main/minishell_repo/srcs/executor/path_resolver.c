@@ -24,8 +24,10 @@ static char	*search_in_path_dirs(char *cmd, char **path_dirs)
 		full_path = build_full_path(path_dirs[i], cmd);
 		if (!full_path)
 			return (NULL);
-		if (access(full_path, F_OK | X_OK) == 0)
-			return (full_path);
+		if (access(full_path, F_OK) == 0)         // solo existencia
+			return (full_path);	
+/*		if (access(full_path, F_OK | X_OK) == 0)
+			return (full_path);*/
 		free(full_path);
 		i++;
 	}
@@ -43,10 +45,16 @@ char	*resolve_command_path(char *cmd, t_shell *shell)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
+		if (access(cmd, F_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}	
+/*	if (ft_strchr(cmd, '/'))
+	{
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (ft_strdup(cmd));
 		return (NULL);
-	}
+	}*/
 	path_env = getenv("PATH");
 	if (!path_env)
 		return (NULL);

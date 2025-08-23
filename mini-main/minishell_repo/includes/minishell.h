@@ -30,5 +30,5 @@
 # include "redirections.h"
 # include "pipes.h"
 # include "error.h"
-
+# include <sys/stat.h>
 #endif
