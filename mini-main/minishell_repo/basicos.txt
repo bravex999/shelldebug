@@ -1,0 +1,10 @@
+/bin/ls
+echo $?
+
+
+echo $?
+   
+	echo $?
+/bin/true
+echo $?
+

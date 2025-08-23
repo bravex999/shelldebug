@@ -1,0 +1,62 @@
+/bin/ls
+/bin/pwd
+/usr/bin/whoami
+
+
+	
+		
+/bin/echo hello world
+/bin/cat /etc/hostname
+/bin/ls -la
+echo hello
+echo -n test
+echo -n -n -nnn hello
+echo
+echo test1 test2 test3
+echo $?
+/bin/ls archivo_que_no_existe
+echo $?
+expr $? + $?
+echo "hello world"
+echo "test   with   spaces"
+echo "cat lol.c | cat > lol.c"
+echo 'single quotes'
+echo '$USER'
+echo '   spaces   '
+echo ''
+env
+export TEST_VAR=value123
+export USER=newuser
+env
+unset TEST_VAR
+env
+pwd
+cd /tmp
+pwd
+cd ..
+pwd
+cd .
+pwd
+cd
+pwd
+ls
+cat /etc/passwd | grep root
+echo test > output.txt
+cat output.txt
+echo append >> output.txt
+cat output.txt
+ls -la | grep output | wc -l
+< /etc/hostname cat
+cat < /etc/hostname > copy.txt
+cat copy.txt
+echo $USER
+echo "$USER"
+echo $HOME
+echo "$HOME $USER"
+wjkgjrgwg4g43go34o
+nosuchcommand
+cat << EOF
+line1
+line2
+EOF
+echo done
