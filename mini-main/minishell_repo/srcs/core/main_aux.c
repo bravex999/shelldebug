@@ -71,7 +71,7 @@ void	start_loop(t_shell *shell)
 				free(line);
 		}
 	}
-}*/
+}
 
 int	handle_ctrl_c(char **line, t_shell *shell)
 {
@@ -82,7 +82,7 @@ int	handle_ctrl_c(char **line, t_shell *shell)
 	free(*line);
 	*line = NULL;
 	return (1);
-}
+}*/
 
 /*static void	print_syntax_error(char *token_str)
 {
