@@ -17,6 +17,8 @@ static void	exec_command(t_pipe_stage *st)
 {
 	char	*path;
 
+	if (!st->cmd->argv || !st->cmd->argv[0])
+		exit(EXIT_OK);
 	if (is_builtin(st->cmd->argv[0]))
 	{
 		execute_builtin(st->cmd, st->sh);
@@ -53,6 +55,8 @@ void	exec_child_stage(t_pipe_stage *st)
 		close(st->nextfd[1]);
 	}
 	apply_redirs(st->cmd);
+	if (!st->cmd->argv || !st->cmd->argv[0])
+		exit(EXIT_OK);
 	exec_command(st);
 }
 
