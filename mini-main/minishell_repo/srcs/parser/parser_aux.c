@@ -13,62 +13,31 @@ void	str_free(char **arr)
 	free(arr);
 }
 
-static int	counter(const char *s, char c, char b)
+static int	fill_single(char **result, const char *s)
 {
-	int	count;
-	int	in_word;
-
-	count = 0;
-	in_word = 0;
-	while (*s)
-	{
-		if ((*s != c && *s != b) && (in_word == 0))
-		{
-			in_word = 1;
-			count++;
-		}
-		else if (*s == c || *s == b)
-			in_word = 0;
-		s++;
-	}
-	return (count);
-}
-
-static char	*get_word(char const *s, char c, char b)
-{
-	char	*start;
-
-	start = (char *)s;
-	while (*s && *s != c && *s != b)
-		s++;
-	return (ft_substr(start, 0, s - start));
+	result[0] = ft_strdup(s);
+	if (!result[0])
+		return (0);
+	result[1] = NULL;
+	return (1);
 }
 
 char	**super_split(char const *s, char c, char b)
 {
 	char	**result;
-	int		i;
 
+	(void)c;
+	(void)b;
 	if (!s)
 		return (NULL);
-	result = ft_calloc(counter(s, c, b) + 1, sizeof(char *));
+	result = ft_calloc(2, sizeof(char *));
 	if (!result)
 		return (NULL);
-	i = 0;
-	while (*s)
+	if (!fill_single(result, s))
 	{
-		if (*s != c && *s != b)
-		{
-			result[i] = get_word(s, c, b);
-			if (!result[i++])
-				return (str_free(result), NULL);
-			while (*s && *s != c && *s != b)
-				s++;
-		}
-		if (*s)
-			s++;
+		free(result);
+		return (NULL);
 	}
-	result[i] = NULL;
 	return (result);
 }
 

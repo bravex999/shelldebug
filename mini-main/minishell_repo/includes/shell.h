@@ -10,6 +10,8 @@ typedef struct s_shell {
 }					t_shell;
 
 void	init_shell(t_shell *shell, char **envp);
-void	cleanup_shell(t_shell *shell);
+char	**copy_env(char **envp);
+void	free_env(char **env);
+char	*get_env_value(t_shell *sh, const char *name);
 
 #endif

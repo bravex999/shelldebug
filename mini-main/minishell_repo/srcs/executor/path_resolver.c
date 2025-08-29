@@ -47,13 +47,7 @@ char	*resolve_command_path(char *cmd, t_shell *shell)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}	
-/*	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}*/
-	path_env = getenv("PATH");
+	path_env = get_env_value(shell, "PATH");
 	if (!path_env)
 		return (NULL);
 	path_dirs = ft_split(path_env, ':');
