@@ -39,11 +39,14 @@ static void	exec_command(t_pipe_stage *st)
 
 void	exec_child_stage(t_pipe_stage *st)
 {
+	int here_flag;
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	here_flag = (st->cmd->heredoc_content != NULL);
 	if (setup_heredoc_stdin(st->cmd, NULL) != 0)
 		exit(EXIT_KO);
-	if (st->idx > 0 && !st->cmd->infile)
+	if (st->idx > 0 && !st->cmd->infile && !here_flag)
 		dup2(st->prev, STDIN_FILENO);
 	if (!st->is_last && !st->cmd->outfile)
 		dup2(st->nextfd[1], STDOUT_FILENO);
