@@ -90,30 +90,3 @@ void	execute_commands(t_cmd *cmds, t_shell *sh)
 		run_external(cmds, sh);
 	restore_redirections(&in, &out);
 }
-
-/*void	execute_commands(t_cmd *commands, t_shell *shell)
-{
-	int	saved_stdin;
-	int	saved_stdout;
-
-	saved_stdout = -1;
-	saved_stdin = -1;
-	if (!commands)
-		return ;
-	if (only_redirs_set_status(commands, shell))
-		return ;
-	if (check_redir(setup_heredoc_stdin(commands, &saved_stdin),
-			&saved_stdin, &saved_stdout))
-		return ;
-	if (check_redir(setup_input_redirection(commands, &saved_stdin),
-			&saved_stdin, &saved_stdout))
-		return ;
-	if (check_redir(setup_output_redirection(commands, &saved_stdout),
-			&saved_stdin, &saved_stdout))
-		return ;
-	if (is_builtin(commands->argv[0]))
-		execute_builtin(commands, shell);
-	else
-		run_external(commands, shell);
-	restore_redirections(&saved_stdin, &saved_stdout);
-}*/
