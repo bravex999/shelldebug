@@ -1,0 +1,105 @@
+export PATH=/usr/bin:/bin
+/bin/rm -f _t_file _t_out _t_out2 _t.sh
+/bin/rm -rf _t_dir_cmd
+/bin/mkdir -p _t_dir_cmd
+
+make -n | /usr/bin/grep -E "(-Wall|-Wextra|-Werror)"
+make
+make
+
+/bin/ls
+
+ 
+ 
+	 
+
+/bin/echo one two three | /usr/bin/wc -w
+/bin/echo A B C D E | /usr/bin/cut -d' ' -f2
+
+echo hola mundo
+echo -n hola
+echo -nnn hola
+
+/bin/false
+echo $?
+/bin/true
+echo $?
+
+/bin/ls inexistente
+echo $?
+/usr/bin/expr $? + $?
+
+echo "cat lol.c | cat > lol.c"
+echo "A   B   C"
+
+echo '$USER'
+echo '' X ''
+
+env | /usr/bin/head -n 5
+
+export PRUEBA_X=123
+env | /usr/bin/grep '^PRUEBA_X=123$'
+export PRUEBA_X=999
+env | /usr/bin/grep '^PRUEBA_X=999$'
+unset PRUEBA_X
+env | /usr/bin/grep '^PRUEBA_X='
+
+pwd
+cd .
+pwd
+cd ..
+pwd
+cd -
+cd _t_dir_cmd
+pwd
+cd ..
+cd NoExiste_ABCDEF
+
+/bin/printf '#!/bin/sh\n/bin/echo RELATIVE_OK\n' > _t.sh
+/bin/chmod +x _t.sh
+./_t.sh
+
+echo PATH=$PATH
+ls
+export PATH=
+ls
+export PATH=/usr/bin:/bin
+export PATH=_t_dir_cmd:/usr/bin:/bin
+/bin/printf '#!/bin/sh\n/bin/echo HIT_FROM_DIR\n' > _t_dir_cmd/whichme
+/bin/chmod +x _t_dir_cmd/whichme
+whichme
+/bin/rm -f _t_dir_cmd/whichme
+
+echo OUT1 > _t_out
+/bin/cat _t_out
+echo +APP >> _t_out
+/bin/cat _t_out
+/bin/echo "IN_CONTENT" > _t_file
+/bin/cat < _t_file
+/bin/echo "HELLO" > _t_file
+/bin/cat < _t_file > _t_out2
+/bin/cat _t_out2
+
+cat <<EOF
+L1
+L2
+EOF
+export VAR_HDOC=KILO
+cat <<EOF
+X $VAR_HDOC Y
+EOF
+cat <<'EOF'
+X $VAR_HDOC Y
+EOF
+
+/bin/echo one two three | /usr/bin/wc -w
+/bin/printf "a\nb\nc\n" | /usr/bin/grep b | /usr/bin/tr a-z A-Z
+/bin/printf "x\ny\n" | /usr/bin/grep x > _t_out
+/bin/cat _t_out
+/bin/ls NoExiste | /usr/bin/grep bla | /usr/bin/head -n1
+
+wjkgjrgwg4g43go34o
+
+/bin/rm -f _t_file _t_out _t_out2 _t.sh
+/bin/rm -rf _t_dir_cmd
+

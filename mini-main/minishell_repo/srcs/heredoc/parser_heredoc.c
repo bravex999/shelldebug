@@ -55,12 +55,16 @@ t_cmd	*build_heredoc_cmd(t_token *tokens, t_shell *shell)
 {
 	t_cmd	*cmd;
 	t_token	*argv_tokens;
+	t_token *cur;
 
 	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	if (process_all_heredocs(cmd, tokens, shell) != 0)
 		return (free_commands(cmd), NULL);
+	cur = tokens;
+	while (cur)
+		cur = process_single_redirection(cmd, cur);	
 	argv_tokens = filter_argv_tokens(tokens);
 	cmd->argv = ultra_split(argv_tokens);
 	free_tokens(argv_tokens);
