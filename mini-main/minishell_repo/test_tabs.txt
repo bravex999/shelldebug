@@ -1,0 +1,8 @@
+echo	hola
+echo		tabs_dobles
+	echo	con_tab_inicial
+ls	-la
+cat	<	archivo.txt
+echo	"con	comillas"
+pwd	
+			echo	multiples	tabs

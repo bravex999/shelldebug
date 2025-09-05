@@ -66,6 +66,26 @@ char	*get_env_value(t_shell *sh, const char *name)
 	return (NULL);
 }
 
+static void	set_min_env(t_shell *shell)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		cwd = ft_strdup("");
+	free_env(shell->envp);
+	shell->envp = malloc(sizeof(char *) * 8);
+	shell->envp[0] = ft_strjoin("PWD=", cwd);
+	shell->envp[1] = ft_strdup("LS_COLORS=");
+	shell->envp[2] = ft_strdup("LESSCLOSE=/usr/bin/lesspipe %s %s");
+	shell->envp[3] = ft_strdup("LESSOPEN=| /usr/bin/lesspipe %s");
+	shell->envp[4] = ft_strdup("SHLVL=1");
+	shell->envp[5] = ft_strdup("_=/usr/bin/env");
+	shell->envp[6] = ft_strdup("PATH=/usr/bin:/bin");
+	shell->envp[7] = NULL;
+	free(cwd);
+}
+
 void	init_shell(t_shell *shell, char **envp)
 {
 	if (!shell)
@@ -79,13 +99,9 @@ void	init_shell(t_shell *shell, char **envp)
 		return ;
 	}
 	if (!envp || !envp[0])
-	{
-		free_env(shell->envp);
-		shell->envp = malloc(sizeof(char *) * 2);
-		shell->envp[0] = ft_strdup("PATH=/usr/bin:/bin");
-		shell->envp[1] = NULL;
-	}
+		set_min_env(shell);
 	shell->last_status = EXIT_OK;
 	shell->running = 1;
 	shell->cmds = NULL;
 }
+
