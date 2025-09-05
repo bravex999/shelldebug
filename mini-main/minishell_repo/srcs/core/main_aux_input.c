@@ -2,7 +2,7 @@
 
 char	*read_input(void)
 {
-	return (readline("minishell$ "));
+	return (readline("\001\033[1;36m\002minishell$\001\033[0m\002 "));
 }
 
 int	check_ctrl_d(char *line)
