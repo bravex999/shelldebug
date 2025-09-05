@@ -11,8 +11,10 @@ void	ex_child(int write_fd, char *delimiter, int quoted, t_shell *shell)
 	{
 		write(write_fd, buf, ft_strlen(buf));
 		free(buf);
+		rl_clear_history();
 		exit(EXIT_OK);
 	}
+	rl_clear_history();
 	exit(SIGINT_EXIT);
 }
 

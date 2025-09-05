@@ -15,5 +15,6 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	start_loop(&shell);
 	free_env(shell.envp);
+	rl_clear_history();
 	return (shell.last_status);
 }
