@@ -39,7 +39,7 @@ static void	exec_command(t_pipe_stage *st)
 
 void	exec_child_stage(t_pipe_stage *st)
 {
-	int here_flag;
+	int	here_flag;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);

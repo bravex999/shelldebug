@@ -8,11 +8,9 @@ char	**copy_env(char **envp)
 
 	n = 0;
 	i = 0;
-	dup = NULL;
-
 	while (envp && envp[n])
 		n++;
-	dup = (char **)malloc(sizeof(char *) * (n + 1));
+	dup = (char **)ft_calloc(n + 1, sizeof(char *));
 	if (!dup)
 		return (NULL);
 	while (i < n)
@@ -20,14 +18,11 @@ char	**copy_env(char **envp)
 		dup[i] = ft_strdup(envp[i]);
 		if (!dup[i])
 		{
-			while (--i >= 0)
-				free(dup[i]);
-			free(dup);
+			free_env(dup);
 			return (NULL);
 		}
 		i++;
 	}
-	dup[n] = NULL;
 	return (dup);
 }
 
@@ -59,7 +54,7 @@ char	*get_env_value(t_shell *sh, const char *name)
 	while (sh->envp && sh->envp[i])
 	{
 		if (ft_strncmp(sh->envp[i], name, len) == 0
-				&& sh->envp[i][len] == '=')
+			&& sh->envp[i][len] == '=')
 			return (sh->envp[i] + len + 1);
 		i++;
 	}
@@ -104,4 +99,3 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->running = 1;
 	shell->cmds = NULL;
 }
-
