@@ -78,6 +78,13 @@ void	init_shell(t_shell *shell, char **envp)
 		shell->cmds = NULL;
 		return ;
 	}
+	if (!envp || !envp[0])
+	{
+		free_env(shell->envp);
+		shell->envp = malloc(sizeof(char *) * 2);
+		shell->envp[0] = ft_strdup("PATH=/usr/bin:/bin");
+		shell->envp[1] = NULL;
+	}
 	shell->last_status = EXIT_OK;
 	shell->running = 1;
 	shell->cmds = NULL;

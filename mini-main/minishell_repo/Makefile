@@ -3,7 +3,6 @@ CC          = cc
 CFLAGS      = -Wall -Werror -Wextra -g3 -O0 -fsanitize=address,undefined
 INCLUDES    = -I includes
 
-# --- Directorios por familia ---
 DIR_CORE    = srcs/core
 DIR_LEXER   = srcs/lexer
 DIR_PARSER  = srcs/parser
@@ -15,7 +14,6 @@ DIR_ERRORS  = srcs/errors
 DIR_UTILS   = srcs/utils
 DIR_BUILT   = built
 
-# --- Listas por familia (solo nombres de archivo) ---
 SRCS_CORE    = main.c signals.c shell.c main_aux.c main_aux_input.c
 SRCS_LEXER   = tokenizer.c tokenizer_aux.c handle_quotes.c
 SRCS_PARSER  = parser.c parser_check.c parser_aux.c parser_aux_2.c parser_extension.c parser_extension_2.c
@@ -25,9 +23,8 @@ SRCS_EXEC    = executor.c executor_2.c executor_aux.c executor_aux_2.c redirecti
 SRCS_PIPES   = pipes.c pipes_2.c pipes_exec.c pipes_exec_2.c
 SRCS_ERRORS  = error.c error_2.c error_vali.c
 SRCS_UTILS   = free_every.c general_aux.c
-SRCS_BUILT   = echo.c
+SRCS_BUILT   = echo.c builtin_cd.c builtin_env.c builtin_exit.c builtin_export.c builtin_pwd.c builtin_unset.c builtin_cd_aux.c builtin_export_aux.c
 
-# --- Composición de rutas completas ---
 SRCS = \
   $(addprefix $(DIR_CORE)/,$(SRCS_CORE)) \
   $(addprefix $(DIR_LEXER)/,$(SRCS_LEXER)) \

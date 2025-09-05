@@ -28,30 +28,39 @@ char	**ultra_split(t_token *token_list)
 	return (argv);
 }
 
+static int	run_builtin_core(t_cmd *cmd, t_shell *shell)
+{
+	if (ft_strcmp(cmd->argv[0], "echo") == 0)
+		return (ft_echo(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+		return (ft_pwd(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
+		return (ft_cd(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+		return (ft_unset(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "export") == 0)
+		return (builtin_export(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "env") == 0)
+		return (ft_env(cmd, shell));
+	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+		return (ft_exit(cmd, shell));
+	return (0);
+}
+
 void	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
 	int	saved_stdin;
+	int	return_built;
 
+	return_built = 0;
 	saved_stdin = -1;
 	if (setup_heredoc_stdin(cmd, &saved_stdin) != 0)
 	{
 		restore_stdin_from_saved(&saved_stdin);
 		return ;
 	}
-	if (ft_strcmp(cmd->argv[0], "echo") == 0)
-		ft_echo(cmd, shell);
-/*  else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-        funcion_pwd(cmd, shell);
-    else if (ft_strcmp(cmd->argv[0], "cd") == 0)
-        funcion_cd(cmd, shell);
-    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-        funcion_unset(cmd, shell);
-    else if (ft_strcmp(cmd->argv[0], "export") == 0)
-        funcion_export(cmd, shell);
-    else if (ft_strcmp(cmd->argv[0], "env") == 0)
-        funcion_env(cmd, shell);
-    else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-        funcion_exit(cmd, shell);*/
+	return_built = run_builtin_core(cmd, shell);
+	shell->last_status = return_built;
 	restore_stdin_from_saved(&saved_stdin);
 }
 
