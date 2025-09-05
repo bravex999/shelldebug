@@ -1,9 +1,0 @@
-# Crear archivo con tabs reales usando printf
-printf 'echo\thola\n' > test_tabs.txt
-printf 'echo\t\ttabs_dobles\n' >> test_tabs.txt
-printf '\techo\tcon_tab_inicial\n' >> test_tabs.txt
-printf 'ls\t-la\n' >> test_tabs.txt
-printf 'cat\t<\tarchivo.txt\n' >> test_tabs.txt
-printf 'echo\t"con\tcomillas"\n' >> test_tabs.txt
-printf 'pwd\t\n' >> test_tabs.txt
-printf '\t\t\techo\tmultiples\ttabs\n' >> test_tabs.txt
