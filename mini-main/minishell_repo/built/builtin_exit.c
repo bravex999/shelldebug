@@ -37,18 +37,6 @@ static long	ft_atol(const char *nptr)
 	return (sign * result);
 }
 
-void	free_env_array(char **envp)
-{
-	int	i;
-
-	if (!envp)
-		return ;
-	i = 0;
-	while (envp[i])
-		free(envp[i++]);
-	free(envp);
-}
-
 static int	is_numeric_aux(const char *str)
 {
 	int	i;
@@ -78,6 +66,35 @@ static void	exit_numeric_error(char *arg, t_shell *shell)
 	exit(255);
 }
 
+static int	exit_arg_out_of_range(const char *s)
+{
+	const char	*p;
+	int			neg;
+	size_t		len;
+
+	if (!s || !*s)
+		return (1);
+	p = s;
+	neg = (p[0] == '-');
+	if (*p == '+' || *p == '-')
+		p++;
+	while (*p == '0')
+		p++;
+	len = ft_strlen(p);
+	if (len == 0)
+		return (0);
+	if (len > 19)
+		return (1);
+	if (len == 19)
+	{
+		if (neg && ft_strncmp(p, "9223372036854775808", 19) > 0)
+			return (1);
+		if (!neg && ft_strncmp(p, "9223372036854775807", 19) > 0)
+			return (1);
+	}
+	return (0);
+}
+
 int	ft_exit(t_cmd *cmd, t_shell *shell)
 {
 	long	code;
@@ -89,6 +106,8 @@ int	ft_exit(t_cmd *cmd, t_shell *shell)
 		exit(shell->last_status);
 	}
 	if (!is_numeric_aux(cmd->argv[1]))
+		exit_numeric_error(cmd->argv[1], shell);
+	if (exit_arg_out_of_range(cmd->argv[1]))
 		exit_numeric_error(cmd->argv[1], shell);
 	if (cmd->argv[2])
 	{
