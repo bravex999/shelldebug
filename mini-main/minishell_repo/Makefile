@@ -23,7 +23,7 @@ SRCS_EXEC    = executor.c executor_2.c executor_aux.c executor_aux_2.c redirecti
 SRCS_PIPES   = pipes.c pipes_2.c pipes_exec.c pipes_exec_2.c
 SRCS_ERRORS  = error.c error_2.c error_vali.c
 SRCS_UTILS   = free_every.c general_aux.c
-SRCS_BUILT   = echo.c builtin_cd.c builtin_env.c builtin_exit.c builtin_export.c builtin_pwd.c builtin_unset.c builtin_cd_aux.c builtin_export_aux.c
+SRCS_BUILT   = echo.c builtin_cd.c builtin_env.c builtin_exit.c builtin_exit_aux.c builtin_export.c builtin_pwd.c builtin_unset.c builtin_cd_aux.c builtin_export_aux.c
 
 SRCS = \
   $(addprefix $(DIR_CORE)/,$(SRCS_CORE)) \
