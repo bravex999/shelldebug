@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:28:10 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:42:21 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	T_WORD,
 	T_QUOTED_DOUBLE,
 	T_QUOTED_SINGLE,
@@ -12,14 +25,15 @@ typedef enum e_token_type {
 	T_HEREDOC
 }	t_token_type;
 
-typedef struct s_token {
+typedef struct s_token
+{
 	char			*str;
 	t_token_type	type;
 	int				expand;
 	int				join_next;
 	int				quoted_del;
 	struct s_token	*next;
-}t_token;
+}					t_token;
 
 t_token	*create_token(t_token_type type, char *str);
 t_token	*tokenize_line(char *line, t_shell *shell);
@@ -28,7 +42,6 @@ t_token	*redir_operators_app_her(char *line, int *i);
 t_token	*simple_redir(char *line, int *i);
 t_token	*words(char *line, int *i, t_shell *shell);
 void	free_tokens(t_token *token_list);
-/*void	 print_token_list(t_token *token_list);*/
 t_token	*create_token_safe(t_token_type type, char *line_token);
 void	add_token(t_token **token_list, t_token *new);
 t_token	*handle_double(char *line, int *i, t_shell *shell);
