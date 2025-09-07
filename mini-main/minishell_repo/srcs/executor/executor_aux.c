@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_aux.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:09:13 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:10:15 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**ultra_split(t_token *token_list)
@@ -81,7 +93,7 @@ void	handle_wait_status(int status, t_shell *shell)
 		else if (WTERMSIG(status) == SIGQUIT)
 		{
 			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-		}	
+		}
 		return ;
 	}
 }

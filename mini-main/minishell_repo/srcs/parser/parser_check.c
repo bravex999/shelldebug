@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_check.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:17:22 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:19:41 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_initial_token(t_token *token_list)
@@ -56,6 +68,6 @@ int	check_all_pipe(t_token *token_list)
 			return (1);
 		previous = current;
 		current = current->next;
-	}	
+	}
 	return (0);
 }

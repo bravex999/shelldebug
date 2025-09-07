@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes_exec_2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:20:35 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:21:58 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	apply_redirs(t_cmd *c)
@@ -68,11 +80,11 @@ static void	update_status(pid_t p, pid_t last, int st, t_shell *sh)
 	if (p == last)
 	{
 		if (WIFEXITED(st))
-		{	
+		{
 			sh->last_status = WEXITSTATUS(st);
 			if (sh->last_status == 130)
 				write(STDOUT_FILENO, "\n", 1);
-		}		
+		}
 		else if (WIFSIGNALED(st))
 		{
 			sh->last_status = 128 + WTERMSIG(st);

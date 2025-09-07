@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path_resolver.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:07:25 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:09:48 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*build_full_path(char *dir, char *cmd)
@@ -46,7 +58,7 @@ char	*resolve_command_path(char *cmd, t_shell *shell)
 		if (access(cmd, F_OK) == 0)
 			return (ft_strdup(cmd));
 		return (NULL);
-	}	
+	}
 	path_env = get_env_value(shell, "PATH");
 	if (!path_env)
 		return (NULL);

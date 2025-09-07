@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chnaranj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:17:07 by chnaranj          #+#    #+#             */
+/*   Updated: 2025/09/07 17:19:20 by chnaranj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h" 
 
 static int		general_check(t_token *token_list);
@@ -12,7 +24,7 @@ t_cmd	*parse_tokens(t_token *token_list, t_shell *shell)
 	if (current)
 	{
 		if (general_check(token_list))
-		{	
+		{
 			return (NULL);
 		}
 		return (build_commands(token_list, shell));
