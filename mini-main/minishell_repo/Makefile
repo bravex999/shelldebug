@@ -1,6 +1,6 @@
 NAME        = minishell
 CC          = cc
-CFLAGS      = -Wall -Werror -Wextra -g3 -O0 -fsanitize=address,undefined
+CFLAGS      = -Wall -Werror -Wextra
 INCLUDES    = -I includes
 
 DIR_CORE    = srcs/core
