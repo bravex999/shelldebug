@@ -27,7 +27,7 @@ int	setup_input_redirection(t_cmd *cmd, int *saved_stdin)
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd == -1)
 	{
-		perror(cmd->infile);
+		print_file_error(NULL, cmd->infile);
 		return (-1);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
@@ -46,7 +46,7 @@ static int	open_dup_stdout(const char *file, int flags)
 	fd = open(file, flags, 0644);
 	if (fd == -1)
 	{
-		perror(file);
+		print_file_error(NULL, (char *)file);
 		return (-1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
