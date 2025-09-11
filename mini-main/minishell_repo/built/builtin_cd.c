@@ -20,7 +20,7 @@ char	*expand_home(char *arg, t_shell *shell)
 	home = ft_getenv(shell->envp, "HOME");
 	if (!home)
 	{
-		write(2, "bash: cd: HOME not set\n", 23);
+		write(2, "minishell: cd: HOME not set\n", 28);
 		return (NULL);
 	}
 	expanded = ft_strjoin(home, arg + 1);
@@ -38,7 +38,7 @@ char	*resolve_cd_target(t_cmd *cmd, t_shell *shell)
 		home = ft_getenv(shell->envp, "HOME");
 		if (!home)
 		{
-			write(2, "bash: cd: HOME not set\n", 23);
+			write(2, "minishell: cd: HOME not set\n", 28);
 			return (NULL);
 		}
 		return (ft_strdup(home));
@@ -55,7 +55,7 @@ char	*resolve_cd_argument(char *arg, t_shell *shell)
 		oldpwd = ft_getenv(shell->envp, "OLDPWD");
 		if (!oldpwd)
 		{
-			write(2, "bash: cd: OLDPWD not set\n", 25);
+			write(2, "minishell: cd: OLDPWD not set\n", 30);
 			return (NULL);
 		}
 		printf("%s\n", oldpwd);
@@ -84,7 +84,7 @@ void	update_pwd_and_oldpwd(t_shell *shell)
 	}
 	else
 	{
-		perror("bash: cd");
+		perror("minishell: cd");
 	}
 }
 
@@ -97,7 +97,7 @@ int	ft_cd(t_cmd *cmd, t_shell *shell)
 		return (1);
 	if (chdir(target_dir) != 0)
 	{
-		write(2, "bash: cd: ", 10);
+		write(2, "minishell: cd: ", 15);
 		write(2, target_dir, ft_strlen(target_dir));
 		write(2, ": ", 2);
 		write(2, strerror(errno), ft_strlen(strerror(errno)));

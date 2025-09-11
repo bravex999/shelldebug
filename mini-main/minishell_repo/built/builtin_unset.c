@@ -78,7 +78,7 @@ int	ft_unset(t_cmd *cmd, t_shell *shell)
 	{
 		if (!is_valid_unset_identifier(cmd->argv[i]))
 		{
-			write(2, "bash: unset: `", 14);
+			write(2, "minishell: unset: `", 19);
 			write(2, cmd->argv[i], ft_strlen(cmd->argv[i]));
 			write(2, "': not a valid identifier\n", 27);
 			error = 1;

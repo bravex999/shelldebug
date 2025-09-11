@@ -86,7 +86,7 @@ int	is_valid_identifier_aux(const char *str)
 
 void	print_export_error(const char *arg)
 {
-	write(2, "minishell: export: `", 21);
+	write(2, "minishell: export: `", 20);
 	write(2, arg, ft_strlen(arg));
 	write(2, "': not a valid identifier\n", 26);
 }
