@@ -49,7 +49,7 @@ static int	print_exported_vars(char **envp)
 	return (0);
 }
 
-static void	handle_export_arg(char *arg, t_shell *shell)
+static int	handle_export_arg(char *arg, t_shell *shell)
 {
 	char	*sep;
 	char	*key;
@@ -58,7 +58,7 @@ static void	handle_export_arg(char *arg, t_shell *shell)
 	if (!is_valid_identifier_aux(arg))
 	{
 		print_export_error(arg);
-		return ;
+		return (1);
 	}
 	sep = ft_strchr(arg, '=');
 	if (sep)
@@ -70,19 +70,25 @@ static void	handle_export_arg(char *arg, t_shell *shell)
 	}
 	else
 		ft_setenv(&shell->envp, arg, "");
+	return (0);
 }
 
 int	builtin_export(t_cmd *cmd, t_shell *shell)
 {
 	int	i;
+	int	error;
+	int	r;
 
 	if (!cmd->argv[1])
 		return (print_exported_vars(shell->envp));
 	i = 1;
+	error = 0;
 	while (cmd->argv[i])
 	{
-		handle_export_arg(cmd->argv[i], shell);
+		r = handle_export_arg(cmd->argv[i], shell);
+		if (r)
+			error = 1;
 		i++;
 	}
-	return (0);
+	return (error);
 }
